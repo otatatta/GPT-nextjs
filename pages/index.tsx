@@ -5,13 +5,26 @@ import Link from "next/link";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import SquigglyLines from "../components/SquigglyLines";
-import { Testimonials } from "../components/Testimonials";
+import axios from "axios";
+import React, { useState } from "react";
 
 const Home: NextPage = () => {
+  const [txt, setTxt] = useState("");
+  const callAI = async () => {
+    const chat: string = (
+      document!.getElementById("text-textbox") as HTMLInputElement
+    ).value;
+
+    const res = await axios.get("/api/chatgpt?chat=" + chat);
+    const data = await res.data;
+    console.log(data);
+    console.log(data.chat);
+    alert(data.chat);
+  };
   return (
     <div className="flex max-w-6xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
       <Head>
-        <title>RoomGPT</title>
+        <title>TEST_GPT</title>
       </Head>
 
       <Header />
@@ -22,17 +35,37 @@ const Home: NextPage = () => {
           rel="noreferrer"
           className="border border-gray-700 rounded-lg py-2 px-4 text-gray-400 text-sm mb-5 transition duration-300 ease-in-out hover:text-gray-300"
         >
-          Clone and deploy your own with{" "}
-          <span className="text-blue-600">Vercel</span>
+          This is Free Plan
         </a>
         <h1 className="mx-auto max-w-4xl font-display text-5xl font-bold tracking-normal text-gray-300 sm:text-7xl">
-          Generating dream rooms{" "}
+          Talk With Me !!
           <span className="relative whitespace-nowrap text-blue-600">
             <SquigglyLines />
             <span className="relative">using AI</span>
           </span>{" "}
           for everyone.
         </h1>
+
+        <div className="mx-auto mt-12 max-w-xl text-lg sm:text-gray-400  text-gray-500 leading-7">
+          <div>
+            <input
+              id="text-textbox"
+              name="text-textbox"
+              placeholder="talk with me"
+              value={txt}
+              onChange={(e) => setTxt(e.target.value)}
+            ></input>
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              callAI();
+            }}
+          >
+            ChatGPTへ送る
+          </button>
+        </div>
+
         <h2 className="mx-auto mt-12 max-w-xl text-lg sm:text-gray-400  text-gray-500 leading-7">
           Take a picture of your room and see how your room looks in different
           themes. 100% free – remodel your room today.
@@ -70,7 +103,6 @@ const Home: NextPage = () => {
           </div>
         </div>
       </main>
-      <Testimonials />
       <Footer />
     </div>
   );
